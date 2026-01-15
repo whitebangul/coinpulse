@@ -86,6 +86,10 @@ const CandleStickChart = ({
   useEffect(() => {
     if (!candleSeriesRef.current) return;
 
+    const convertedToSeconds = ohlcData.map(
+      (item) => [Math.floor(item[0] / 1000), item[1], item[2], item[3], item[4]] as OHLCData,
+    );
+
     const converted = convertOHLCData(convertedToSeconds);
     candleSeriesRef.current.setData(converted);
     chartRef.current?.timeScale().fitContent();
