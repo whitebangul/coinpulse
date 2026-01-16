@@ -8,6 +8,42 @@ const API_KEY = process.env.COINGECKO_API_KEY;
 if (!BASE_URL) throw new Error('Could not get base url');
 if (!API_KEY) throw new Error('Could not get api key');
 
+export async function searchCoins(query: string): Promise<any[]> {
+  if (!query) return [];
+
+  try {
+    const searchData = await fetcher<{
+      coins: { id: string; name: string; symbol: string; thumb: string }[];
+    }>('/search', { query });
+
+    const topCoinIds = searchData.coins
+      .slice(0, 10)
+      .map((coin) => coin.id)
+      .join(',');
+
+    if (!topCoinIds) return [];
+
+    const marketData = await fetcher<CoinMarketData[]>('/coins/markets', {
+      vs_currency: 'usd',
+      ids: topCoinIds,
+    });
+
+    return marketData.map((coin) => ({
+      id: coin.id,
+      name: coin.name,
+      symbol: coin.symbol,
+      thumb: coin.image, // Map 'image' to 'thumb'
+      data: {
+        price: coin.current_price, // As a number for formatCurrency()
+        price_change_percentage_24h: coin.price_change_percentage_24h, // As a number
+      },
+    }));
+  } catch (error) {
+    console.error('Failed to search and merge coin data:', error);
+    return [];
+  }
+}
+
 export async function fetcher<T>(
   endpoint: string,
   params?: QueryParams,
