@@ -60,3 +60,46 @@ export const TrendingCoinsFallback = () => {
     </div>
   );
 };
+
+export const CategoriesFallback = () => {
+  const columns: DataTableColumn<number>[] = [
+    {
+      header: 'Category',
+      cell: () => <div className="w-24 h-4 animate-pulse bg-dark-400 rounded-md" />,
+    },
+    {
+      header: 'Top Gainers',
+      cell: () => (
+        <div className="flex gap-1">
+          <div className="w-7 h-7 animate-pulse bg-dark-400 rounded-full" />
+          <div className="w-7 h-7 animate-pulse bg-dark-400 rounded-full" />
+          <div className="w-7 h-7 animate-pulse bg-dark-400 rounded-full" />
+        </div>
+      ),
+    },
+    {
+      header: '24h Change',
+      cell: () => <div className="w-16 h-4 animate-pulse bg-dark-400 rounded-md" />,
+    },
+    {
+      header: 'Market Cap',
+      cell: () => <div className="w-20 h-4 animate-pulse bg-dark-400 rounded-md" />,
+    },
+    {
+      header: '24h Volume',
+      cell: () => <div className="w-20 h-4 animate-pulse bg-dark-400 rounded-md" />,
+    },
+  ];
+
+  return (
+    <div id="categories-fallback">
+      <h4>Top Categories</h4>
+      <DataTable
+        data={[1, 2, 3, 4, 5, 6, 7, 8, 9, 10]}
+        columns={columns}
+        rowKey={(i) => i}
+        tableClassName="mt-3"
+      />
+    </div>
+  );
+};
